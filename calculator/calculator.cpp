@@ -1,16 +1,28 @@
 #include "calculator.h"
 #include <cmath>
 #include <iostream>
-#include <vector>
+#include <string>
+
+using Number = double;
 
 bool ReadNumber(Number& result){
     if (!(std::cin >> result)) {
             std::cerr << "Error: Numeric operand expected" << std::endl;
+            return false;
     }
     return true;
 }
-bool CalculatorCommand(std::string token, Number& number){
-    std::vector<Number> arr;
+bool CalculatorCommand(){
+    bool flag = false;
+
+    Number number;
+
+    if(!ReadNumber(number)){
+        return false;
+    }
+
+    std::string token;
+    Number saved_number;
     Number second_number;
     while(std::cin >> token){
      
@@ -26,15 +38,16 @@ bool CalculatorCommand(std::string token, Number& number){
             continue;
         }
         if(token == "s"){
-            arr.push_back(number);
+            saved_number = number;
+            flag = true;
             continue;
         }
         if(token == "l"){
-            if(arr.empty()){
+            if(!flag){
                 std::cerr << "Error: Memory is empty" << std::endl;
                 return false;
             }
-            else number = arr.back();
+            else number = saved_number;
             continue;
         }
 
@@ -79,9 +92,5 @@ bool CalculatorCommand(std::string token, Number& number){
 }
 
 bool RunCalculatorCycle(){
-    Number number;
-    ReadNumber(number);
-    std::string token;
-    CalculatorCommand(token, number);
-    return true;
+    return CalculatorCommand();
 }
