@@ -2,8 +2,6 @@
 #include "ui_mainwindow.h"
 #include "calculator.h"
 
-#include <QDebug>
-
 MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -16,6 +14,10 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 void MainWindow::SetText(const QString& text){
+    if(equally_){
+        ui->l_formula->setText("");
+        equally_ = false;
+    }
     QString remove = RemoveTrailingZeroes(text);
     QString normalize = NormalizeNumber(remove);
     input_number_ = normalize;
@@ -93,6 +95,9 @@ void MainWindow::on_pb_dot_clicked()
 
 void MainWindow::on_pb_change_the_sign_clicked()
 {
+    if(active_number_ == 0 || input_number_ == ""){
+        return;
+    }
     if(input_number_.startsWith("-")){
         QString minus = input_number_.mid(1);
         SetText(minus);
@@ -158,6 +163,7 @@ QString MainWindow::OpToString(Operation op){
     case Operation::MULTIPLICATION: return "×";
     case Operation::SUBTRACTION: return "−";
     case Operation::POWER: return "^";
+    default : return QString("");
     }
 }
 
@@ -199,6 +205,9 @@ void MainWindow::on_pb_equally_clicked()
         ui->l_formula->setText(QString("%1 %2 %3 =").arg(calculator_.GetNumber()).arg(OpToString(current_operation_)).arg(active_number_));
     }
     switch(current_operation_){
+        case Operation::NO_OPERATION:{
+        return;
+        }
         case Operation::ADDITION : {
         calculator_.Add(active_number_);
             break;
@@ -224,6 +233,7 @@ void MainWindow::on_pb_equally_clicked()
     ui->l_result->setText(QString::number(active_number_));
     input_number_ = "";
     current_operation_ = Operation::NO_OPERATION;
+    equally_ = true;
 }
 
 

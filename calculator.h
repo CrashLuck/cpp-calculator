@@ -15,9 +15,6 @@ public:
     void Div(Number n);
     void Mul(Number n);
     void Pow(Number n);
-    //void Save();
-    //void Load();
-    //bool HasMem() const;
     std::string GetNumberRepr() const;
 
 };
