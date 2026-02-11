@@ -72,7 +72,7 @@ void MainWindow::on_pb_seven_clicked()
 
 void MainWindow::on_pb_eight_clicked()
 {
-    AddText("8");
+   AddText("8");
 }
 
 
@@ -146,13 +146,18 @@ QString MainWindow::NormalizeNumber(const QString &text) {
 }
 
 void MainWindow::SetOperation(Operation op){
+    replace_ = (current_operation_ == Operation::NO_OPERATION);
     if(current_operation_ == Operation::NO_OPERATION){
         calculator_.Set(active_number_);
     }
+    QString buf = input_number_;
     current_operation_= op;
     ui->l_formula->setText(QString("%1 %2").arg(calculator_.GetNumber()).arg(OpToString(op)));
     input_number_ = "";
-
+    if(!replace_ && !buf.isEmpty()){
+        input_number_ = buf;
+        ui->l_result->setText(input_number_);
+    }
 }
 
 QString MainWindow::OpToString(Operation op){
@@ -261,7 +266,7 @@ void MainWindow::on_pb_MR_clicked()
     }
     active_number_ = memory_;
     ui->l_result->setText(QString::number(active_number_));
-    input_number_ = 0;
+    input_number_ = "0";
 }
 
 
