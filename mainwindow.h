@@ -67,4 +67,5 @@ private:
     double memory_{};
     bool saved_in_memory_{false};
     bool equally_{false};
+    bool replace_{false};
 };
