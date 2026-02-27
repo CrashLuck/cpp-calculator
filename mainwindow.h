@@ -1,6 +1,7 @@
 #pragma once
 
 #include "calculator.h"
+#include "enums.h"
 
 #include <QMainWindow>
 
@@ -18,33 +19,28 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
 
-    enum class Operation{
-        NO_OPERATION,
-        ADDITION,
-        SUBTRACTION,
-        MULTIPLICATION,
-        DIVISION,
-        POWER
-    };
+    void SetInputText(const std::string& text);
+    void SetErrorText(const std::string& text);
+    void SetFormulaText(const std::string& text);
+    void SetMemText(const std::string& text);
+    void SetExtraKey(const std::optional<std::string>& key);
 
-    void SetText(const QString& text);
-    void AddText(const QString& suffix);
-    QString RemoveTrailingZeroes(const QString &text);
-    QString NormalizeNumber(const QString &text);
-    void SetOperation(Operation op);
-    QString OpToString(Operation op);
+    void SetDigitKeyCallback(std::function<void(int key)> cb);
+    void SetProcessOperationKeyCallback(std::function<void(Operation key)> cb);
+    void SetProcessControlKeyCallback(std::function<void(ControlKey key)> cb);
+    void SetControllerCallback(std::function<void(ControllerType controller)> cb);
 
 private slots:
     void on_pb_one_clicked();
     void on_pb_two_clicked();
     void on_pb_three_clicked();
-    void on_bp_four_clicked();
+    void on_pb_four_clicked();
     void on_pb_five_clicked();
     void on_pb_six_clicked();
     void on_pb_seven_clicked();
     void on_pb_eight_clicked();
     void on_pb_nine_clicked();
-    void on_pb_dot_clicked();
+    void on_tb_extra_clicked();
     void on_pb_change_the_sign_clicked();
     void on_pb_erase_clicked();
     void on_pb_zero_clicked();
@@ -58,14 +54,14 @@ private slots:
     void on_pb_MC_clicked();
     void on_pb_MR_clicked();
     void on_pb_MS_clicked();
+    void on_cmb_controller_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow* ui;
-    Calculator calculator_;
-    QString input_number_;
-    Number active_number_;
-    Operation current_operation_ = Operation::NO_OPERATION;
-    double memory_{};
-    bool saved_in_memory_{false};
-    bool equally_{false};
-    bool replace_{false};
+
+    std::function<void(Operation key)> operation_cb_;
+    std::function<void(int key)> digit_cb_;
+    std::function<void(ControlKey key)> control_cb_;
+    std::function<void(ControllerType controller)> controller_cb_;
 };
+
