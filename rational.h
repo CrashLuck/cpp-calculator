@@ -21,31 +21,24 @@ public:
 
     //operator +-/*
     inline Rational operator+(const Rational& rt) const{
-        int numerator = numerator_ * rt.denominator_ + denominator_ * rt.numerator_;
-        int denominator = denominator_ * rt.denominator_;
-        Rational result(numerator, denominator);
-        result.Reduction();
+        Rational result = *this;
+        result += rt;
         return result;
+
     }
     inline Rational operator-(const Rational& rt) const{
-        int numerator = numerator_ * rt.denominator_ - denominator_ * rt.numerator_;
-        int denominator = denominator_ * rt.denominator_;
-        Rational result(numerator, denominator);
-        result.Reduction();
+        Rational result = *this;
+        result -= rt;
         return result;
     }
     inline Rational operator*(const Rational & rt) const{
-        int numerator = numerator_ * rt.numerator_;
-        int denominator = rt.denominator_ * denominator_;
-        Rational result(numerator, denominator);
-        result.Reduction();
+        Rational result = *this;
+        result *= rt;
         return result;
     }
     inline Rational operator/(const Rational& rt) const{
-        int numerator = numerator_ * rt.denominator_;
-        int denominator = denominator_ * rt.numerator_;
-        Rational result(numerator, denominator);
-        result.Reduction();
+        Rational result = *this;
+        result /= rt;
         return result;
     }
 
